@@ -51,7 +51,7 @@ def sendPacket(address_long, address_short, payload):
         """
         Sends a Packet of data to an XBee.
 
-        Inputs:     wddress_long - 64bit destination XBee Address
+ 	Inputs:     address_long - 64bit destination XBee Address
                     address_short - 16bit destination XBee Address
                     payload - Information to be sent to payload
         """

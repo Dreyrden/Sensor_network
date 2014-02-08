@@ -3,7 +3,8 @@ Remote Sensing Base communication protocol.
 
 Dependencies:
     apscheduler - http://pythonhosted.org/APScheduler/
-    xbee python library - https://code.google.com/p/python-xbee/
+    xbee python library - https://code.google.com/p/python-xbee/downloads/list
+    pyserial
 
 """
 
@@ -11,7 +12,7 @@ from xbee import ZigBee
 from apscheduler.scheduler import Scheduler
 import serial
 
-# Implementation of logging library required
+#Implementation of logging library required
 #import logging
 #import datetime
 import time
@@ -28,9 +29,10 @@ BAUD_RATE = 9600
 BROADCAST = b'\x00\x00\x00\x00\x00\x00\xFF\xFF'
 # This is the 'I don't know' 16 bit address
 UNKNOWN = b'\xFF\xFE'
-
 # Store all network keys in list, retreive using index
-# network_long = ['\x00\x00\x00\x00\x00\x00\xff\xff']  # etc
+network_long = [b'\x00\x00\x00\x00\x00\x00\xFF\xFF',
+                b'\x00\x00\x00\x00\x00\x00\xFF\xFF']  # etc
+# Can just use UNKNOWN short key as only the 64bit address is required
 # network_short = ['\x00\x00']  # etc
 
 '''Function Definitions'''
@@ -69,7 +71,7 @@ def sendQueryPacket():
         Sends a test packet to all XBees on network
         """
         print('Sending Test Packet')
-        sendPacket(BROADCAST, UNKNOWN, b'q')
+        sendPacket(BROADCAST, UNKNOWN, b'q00')
 
 
 def handlePacket(data):

@@ -25,13 +25,13 @@ void setup() {
 }
 
 void loop() {
-  msNow = millis();
+  //msNow = millis();
   readXBee();
  // delay(100);
-  if (msNow > msLast + 10000) {                   //transmit pachube data every 60 sec
-  xbeeTX2();
-  msLast = msNow;
-        }
+  //if (msNow > msLast + 10000) {                   //transmit pachube data every 60 sec
+  //xbeeTX2();
+  //msLast = msNow;
+        //}
 }
 
 
@@ -84,7 +84,12 @@ String readXBee(){
 else if(buff[0] == 'q'){
   newMes = 1; 
   Serial.print("Message Content: Check Status\n");
-  xbeeTX();
+  Serial.print(buff);
+  zbTx.setAddress64(Broadcast);
+  zbTx.setAddress16(0xFFFE);
+  zbTx.setPayload((uint8_t *)buff);
+  zbTx.setPayloadLength(strlen(buff));
+  xbee.send(zbTx);
 }
 else { 
  //sent data is a message 

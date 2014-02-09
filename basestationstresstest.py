@@ -19,7 +19,7 @@ import time
 
 
 import logging
-logging.basicConfig(filename='example.log', setLevel=logging.INFO)
+logging.basicConfig(filename='example.log', level=logging.INFO)
 
 time.clock()
 # Serial Port Information
@@ -62,6 +62,7 @@ def message_received_stress(data):
             if ord(data['deliver_status']) != 0:
                 logging.info('Transmit error = ')
                 logging.info(data['deliver_status'].encode('hex'))
+            logging.info('Transmit Status')
 
         # Determine if received packet is a data packet
         elif data['id'] == 'rx':
@@ -81,7 +82,8 @@ def sendPacket(address_long, address_short, payload):
         """
         #logging.info(len(address_long))
         #logging.info(len(address_short))
-        logging.info('Sent Packet at: ' + str(time.clock()))
+        print('Sent Packet at: ' + str(time.clock()) + str(payload))
+        logging.info('Sent Packet at: ' + str(time.clock()) + ' ' + str(payload))
         xbee.send('tx',
                   dest_addr_long=address_long,
                   dest_addr=address_short,
@@ -90,7 +92,7 @@ def sendPacket(address_long, address_short, payload):
 
 # Generate Stress Packets
 print('generating stress packets')
-sp = stresspacket(1000,8)
+sp = stresspacket(100,8)
 
 # Open XBee Serial Port
 ser = serial.Serial(PORT, BAUD_RATE)
@@ -104,8 +106,9 @@ xbee = ZigBee(ser, callback=message_received_stress, escaped=True)
 print('sending stress packets')
 for x in sp:
         sendPacket(BROADCAST, UNKNOWN, x)
-        # time.delay(0.001)
+        time.sleep(1.5)
 
+time.sleep(10)
 # Main thread handles received packets
 '''while True:
     try:
